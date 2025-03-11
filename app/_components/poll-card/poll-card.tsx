@@ -1,7 +1,7 @@
 'use client';
 import { IPoll } from '@/types';
 import { cn } from '@/utils/cn';
-import { voteToPoll } from '@/utils/fetchers';
+import { addReactionToPoll, voteToPoll } from '@/utils/fetchers';
 import { formatDistanceToNow } from 'date-fns';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -18,11 +18,7 @@ interface IProps {
 
 const PollCard = ({ pollData, isDetailedView }: IProps) => {
   const isExpired = new Date(pollData.expiresIn) < new Date();
-  const [trendingCount, setTrendingCount] = useState(0);
-  const [likeCount, setLikeCount] = useState(0);
   const [isCopying, setIsCopying] = useState(false);
-
-  console.log({ likeCount });
 
   const { mutate } = useSWRConfig();
 
@@ -61,6 +57,30 @@ const PollCard = ({ pollData, isDetailedView }: IProps) => {
       toast.error((error as { message: string })?.message || 'Failed to vote', {
         id: 'voting',
       });
+    }
+  };
+
+  const handleAddReaction = async (reaction: 'like' | 'trending') => {
+    toast.loading('Reacting to the poll...', { id: 'reaction' });
+
+    try {
+      const response = await addReactionToPoll({
+        pollId: pollData._id,
+        reaction,
+      });
+      toast.success(response?.message || 'Your reaction has been recorded', {
+        id: 'reaction',
+      });
+
+      mutate(`/polls/${pollData._id}`, response);
+      mutate(`/polls`);
+    } catch (error) {
+      toast.error(
+        (error as { message: string })?.message || 'Failed to react',
+        {
+          id: 'reaction',
+        }
+      );
     }
   };
 
@@ -136,15 +156,15 @@ const PollCard = ({ pollData, isDetailedView }: IProps) => {
           {/* 🔥 Trending */}
           <ReactionButton
             emoji="🔥"
-            count={trendingCount}
-            onClick={() => setTrendingCount((prev) => prev + 1)}
+            count={pollData.reactions?.['trending'] || 0}
+            onClick={() => handleAddReaction('trending')}
           />
 
           {/* 👍 Like */}
           <ReactionButton
             emoji="👍"
-            count={trendingCount}
-            onClick={() => setLikeCount((prev) => prev + 1)}
+            count={pollData.reactions?.['like'] || 0}
+            onClick={() => handleAddReaction('like')}
           />
         </div>
 

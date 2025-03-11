@@ -15,6 +15,7 @@ export interface IPoll {
   question: string;
   options: IPollOption[];
   votes: { [key: string]: number };
+  reactions: { like: number; trending: number };
   expiresIn: Date;
   isPrivate: boolean;
   hideResults: boolean;

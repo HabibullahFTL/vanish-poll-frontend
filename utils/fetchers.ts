@@ -92,3 +92,28 @@ export const createPoll = async (data: ICreatePoll) => {
 
   return updatedData as IResponse<IComment>;
 };
+
+export const addReactionToPoll = async (data: {
+  pollId: string;
+  reaction: string;
+}) => {
+  const finalURL = baseURL + '/polls/add-reaction';
+
+  const response = await fetch(finalURL, {
+    credentials: 'include',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  const updatedData = await response.json();
+
+  if (!response.ok) {
+    throw new Error(updatedData?.message);
+  }
+
+  return updatedData as IResponse<IPoll>;
+};
