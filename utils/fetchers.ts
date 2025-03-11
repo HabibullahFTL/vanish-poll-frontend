@@ -1,3 +1,4 @@
+import { ICreatePoll } from '@/app/poll/create/page';
 import { IComment, IPoll, IResponse } from '@/types';
 
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -50,6 +51,28 @@ export const voteToPoll = async (data: {
 
 export const addComment = async (data: { pollId: string; comment: string }) => {
   const finalURL = baseURL + '/comments/add-comment';
+
+  const response = await fetch(finalURL, {
+    credentials: 'include',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  const updatedData = await response.json();
+
+  if (!response.ok) {
+    throw new Error(updatedData?.message);
+  }
+
+  return updatedData as IResponse<IComment>;
+};
+
+export const createPoll = async (data: ICreatePoll) => {
+  const finalURL = baseURL + '/polls/create';
 
   const response = await fetch(finalURL, {
     credentials: 'include',

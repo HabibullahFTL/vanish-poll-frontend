@@ -46,7 +46,7 @@ const CommentBox = ({ pollId }: IProps) => {
       formMethods.reset();
 
       mutate(`/comments/${pollId}`);
-      mutate(`/polls`, response);
+      mutate(`/polls`);
     } catch (error) {
       toast.error(
         (error as { message: string })?.message || 'Failed to comment',
@@ -62,7 +62,8 @@ const CommentBox = ({ pollId }: IProps) => {
   return (
     <form
       onSubmit={formMethods.handleSubmit(onSubmit)}
-      className="mt-4  flex md:gap-2 flex-wrap"
+      id="comment-box"
+      className="mt-4 flex md:gap-2 flex-wrap"
     >
       <input
         disabled={isSubmitting}

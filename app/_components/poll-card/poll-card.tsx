@@ -18,11 +18,11 @@ interface IProps {
 
 const PollCard = ({ pollData, isDetailedView }: IProps) => {
   const isExpired = new Date(pollData.expiresIn) < new Date();
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [trendingCount, setTrendingCount] = useState(0);
   const [likeCount, setLikeCount] = useState(0);
-  const [commentCount, setCommentCount] = useState(5);
   const [isCopying, setIsCopying] = useState(false);
+
+  console.log({ likeCount });
 
   const { mutate } = useSWRConfig();
 
@@ -43,7 +43,7 @@ const PollCard = ({ pollData, isDetailedView }: IProps) => {
         id: 'copy-link',
         duration: 4000,
       });
-    }, 400);
+    }, 500);
   };
 
   const handleVoteToPoll = async (optionId: string) => {
@@ -56,7 +56,7 @@ const PollCard = ({ pollData, isDetailedView }: IProps) => {
       });
 
       mutate(`/polls/${pollData?._id}`, response);
-      mutate(`/polls`, response);
+      mutate(`/polls`);
     } catch (error) {
       toast.error((error as { message: string })?.message || 'Failed to vote', {
         id: 'voting',
@@ -100,7 +100,6 @@ const PollCard = ({ pollData, isDetailedView }: IProps) => {
               name={`poll-${pollData._id}`}
               value={option.id}
               className="hidden"
-              checked={selectedOption === option.id}
               onChange={() => handleVoteToPoll(option.id)}
               disabled={isExpired}
             />
@@ -152,16 +151,15 @@ const PollCard = ({ pollData, isDetailedView }: IProps) => {
         <div className="flex gap-2">
           {/* 💬 Comments */}
           <Link
-            href={isDetailedView ? '#' : pollLink}
+            href={isDetailedView ? '#comment-box' : pollLink + '#comment-box'}
             className={cn(
-              'flex items-center cursor-pointer px-6 bg-blue-500 py-2 rounded text-white space-x-1 hover:text-gray-900 transition',
-              isDetailedView
-                ? 'bg-gray-200 hover:text-gray-600 cursor-default text-gray-600'
-                : ''
+              'flex items-center cursor-pointer px-6 bg-blue-500 py-2 rounded text-white space-x-1 hover:text-gray-900 transition'
             )}
           >
             <FaMessage size={18} />
-            <span className="text-sm">{commentCount} Comments</span>
+            <span className="text-sm">
+              {isDetailedView ? 'Write a comment' : 'View comments'}{' '}
+            </span>
           </Link>
 
           {/* 👁️ View */}

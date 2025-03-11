@@ -10,7 +10,7 @@ const Navbar = () => {
       text: 'Home',
     },
     {
-      link: '/create-a-poll',
+      link: '/poll/create',
       text: 'Create a poll',
     },
   ];
