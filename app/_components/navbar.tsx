@@ -6,12 +6,8 @@ import Link from 'next/link';
 const Navbar = () => {
   const menuItems = [
     {
-      link: '/',
-      text: 'Home',
-    },
-    {
       link: '/poll/create',
-      text: 'Create a poll',
+      text: 'Add a poll',
     },
   ];
   return (

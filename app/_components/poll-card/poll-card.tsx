@@ -151,7 +151,7 @@ const PollCard = ({ pollData, isDetailedView }: IProps) => {
       </div>
 
       {/* Reaction & Action Buttons */}
-      <div className="mt-4 flex justify-between items-center text-gray-600">
+      <div className="mt-4 flex flex-wrap gap-2 justify-between items-center text-gray-600">
         <div className="flex gap-2">
           {/* 🔥 Trending */}
           <ReactionButton
