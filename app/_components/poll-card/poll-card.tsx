@@ -56,6 +56,7 @@ const PollCard = ({ pollData, isDetailedView }: IProps) => {
       });
 
       mutate(`/polls/${pollData?._id}`, response);
+      mutate(`/polls`, response);
     } catch (error) {
       toast.error((error as { message: string })?.message || 'Failed to vote', {
         id: 'voting',
@@ -71,7 +72,7 @@ const PollCard = ({ pollData, isDetailedView }: IProps) => {
   );
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md border">
+    <div className="p-4 bg-white rounded-lg shadow-md border border-gray-300">
       <h2 className="font-semibold text-xl text-brand">{pollData.question}</h2>
 
       <div className="mt-3 space-y-2">

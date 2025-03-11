@@ -32,7 +32,7 @@ export default function Home() {
       )}
 
       <div className="space-y-4">
-        {data?.data?.map((poll) => (
+        {(data?.data || [])?.map((poll) => (
           <PollCard key={poll?._id} pollData={poll} />
         ))}
       </div>

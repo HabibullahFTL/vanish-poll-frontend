@@ -26,3 +26,11 @@ export interface IPollOption {
   id: string;
   text: string;
 }
+
+export interface IComment {
+  _id: string;
+  comment: string;
+  pollId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
